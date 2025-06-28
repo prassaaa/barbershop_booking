@@ -54,6 +54,42 @@ lib/
 - ✅ User management and role assignment
 - ✅ System settings configuration
 
+## 🚀 Quick Start
+
+### 1. Clone & Install
+```bash
+git clone https://github.com/prassaaa/barbershop_booking.git
+cd barbershop_booking
+flutter pub get
+flutter packages pub run build_runner build
+```
+
+### 2. Firebase Setup
+Follow the **[Firebase Setup Guide](docs/FIREBASE_SETUP.md)** to configure:
+- Authentication (Email/Password, Google Sign-in)
+- Firestore Database
+- Cloud Messaging
+- Storage
+
+### 3. Run the App
+```bash
+# Mobile
+flutter run
+
+# Web (Admin Panel)
+flutter run -d chrome
+
+# Specific device
+flutter run -d <device-id>
+```
+
+## 📚 Documentation
+
+- **[Firebase Setup Guide](docs/FIREBASE_SETUP.md)** - Complete Firebase configuration instructions
+- **[Architecture Documentation](docs/ARCHITECTURE.md)** - Clean Architecture implementation details
+- **[API Documentation](docs/API.md)** - Firebase integration and data structures
+- **[Development Guide](docs/DEVELOPMENT.md)** - Development workflow and best practices
+
 ## 🛠️ Tech Stack
 
 | Category | Technology |
@@ -87,11 +123,20 @@ lib/
 3. **Firebase Project** (for backend services)
 4. **IDE**: VS Code or Android Studio
 
+## 🔧 Setup Instructions
+
+### Prerequisites
+
+1. **Flutter SDK** (version 3.19.0 or higher)
+2. **Dart SDK** (version 3.8.1 or higher)
+3. **Firebase Project** (for backend services)
+4. **IDE**: VS Code or Android Studio
+
 ### Installation Steps
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/prassaaa/barbershop_booking.git
    cd barbershop_booking
    ```
 
@@ -106,14 +151,9 @@ lib/
    ```
 
 4. **Firebase Setup**
-   - Create a new Firebase project
-   - Enable Authentication (Email/Password, Google)
-   - Create Firestore database
-   - Enable Cloud Messaging
-   - Download configuration files:
-     - `google-services.json` for Android (place in `android/app/`)
-     - `GoogleService-Info.plist` for iOS (place in `ios/Runner/`)
-     - Web config (update `web/index.html`)
+   - Follow the complete **[Firebase Setup Guide](docs/FIREBASE_SETUP.md)**
+   - Configure Authentication, Firestore, and Cloud Messaging
+   - Add configuration files to your project
 
 5. **Run the application**
    ```bash
@@ -126,6 +166,10 @@ lib/
    # For specific device
    flutter run -d <device-id>
    ```
+
+### Development Setup
+
+For detailed development instructions, see **[Development Guide](docs/DEVELOPMENT.md)**
 
 ## 🗄️ Database Structure
 
@@ -215,10 +259,13 @@ reviews/{reviewId} {
 ### Phase 1: Foundation ✅
 - [x] Project setup and architecture
 - [x] Core services and utilities
-- [x] Authentication system
+- [x] Complete authentication system
 - [x] Basic UI components
+- [x] Customer home page
 
 ### Phase 2: Core Features (In Progress)
+- [x] Real Firebase authentication integration
+- [x] Customer dashboard with modern UI
 - [ ] Customer booking flow
 - [ ] Barber schedule management
 - [ ] Basic admin panel

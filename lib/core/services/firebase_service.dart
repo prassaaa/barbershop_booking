@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import '../../firebase_options.dart';
 
 class FirebaseService {
   static FirebaseAuth get auth => FirebaseAuth.instance;
@@ -11,7 +12,9 @@ class FirebaseService {
   static FirebaseStorage get storage => FirebaseStorage.instance;
   
   static Future<void> initialize() async {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     await _setupFirebaseMessaging();
   }
   

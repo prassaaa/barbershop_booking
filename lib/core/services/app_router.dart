@@ -4,6 +4,7 @@ import '../constants/app_routes.dart';
 import '../../features/auth/presentation/pages/splash_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
+import '../../features/customer/presentation/pages/customer_home_page.dart';
 import '../services/firebase_service.dart';
 
 class AppRouter {
@@ -166,11 +167,3 @@ class ErrorPage extends StatelessWidget {
   }
 }
 
-class CustomerHomePage extends StatelessWidget {
-  const CustomerHomePage({super.key});
-  
-  @override
-  Widget build(BuildContext context) {
-    return const PlaceholderPage(title: 'Customer Home');
-  }
-}
