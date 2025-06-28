@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/constants/app_routes.dart';
-import '../../../../core/services/firebase_service.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../providers/auth_state_provider.dart';
 
-class SplashPage extends StatefulWidget {
+class SplashPage extends ConsumerStatefulWidget {
   const SplashPage({super.key});
 
   @override
-  State<SplashPage> createState() => _SplashPageState();
+  ConsumerState<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> {
+class _SplashPageState extends ConsumerState<SplashPage> {
   @override
   void initState() {
     super.initState();
@@ -20,19 +22,48 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> _initializeApp() async {
-    // Simulate loading time
+    // Show splash for minimum 2 seconds
     await Future.delayed(const Duration(seconds: 2));
     
     if (!mounted) return;
     
-    // Check if user is logged in
-    final isLoggedIn = FirebaseService.isUserLoggedIn;
+    // Get current user
+    final authNotifier = ref.read(authStateProvider.notifier);
+    final result = await authNotifier.getCurrentUser();
     
-    if (isLoggedIn) {
-      // TODO: Check user role and redirect accordingly
-      context.go(AppRoutes.home);
-    } else {
-      context.go(AppRoutes.login);
+    if (!mounted) return;
+    
+    result.fold(
+      (failure) {
+        // User not logged in or error occurred
+        context.go(AppRoutes.login);
+      },
+      (user) {
+        if (user != null) {
+          // User is logged in, navigate based on role
+          _navigateBasedOnRole(user.role);
+        } else {
+          // User not logged in
+          context.go(AppRoutes.login);
+        }
+      },
+    );
+  }
+
+  void _navigateBasedOnRole(String role) {
+    switch (role) {
+      case AppConstants.roleCustomer:
+        context.go(AppRoutes.home);
+        break;
+      case AppConstants.roleBarber:
+        context.go(AppRoutes.barberDashboard);
+        break;
+      case AppConstants.roleAdmin:
+      case AppConstants.roleSuperAdmin:
+        context.go(AppRoutes.adminDashboard);
+        break;
+      default:
+        context.go(AppRoutes.home);
     }
   }
 

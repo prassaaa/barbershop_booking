@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/constants/app_routes.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../shared/widgets/widgets.dart';
+import '../providers/auth_state_provider.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  ConsumerState<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  bool _isLoading = false;
+  final _phoneController = TextEditingController();
 
   @override
   void dispose() {
@@ -27,43 +29,53 @@ class _RegisterPageState extends State<RegisterPage> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
   Future<void> _handleRegister() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _isLoading = true);
+    final authNotifier = ref.read(authStateProvider.notifier);
+    
+    final result = await authNotifier.registerWithEmailAndPassword(
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+      name: _nameController.text.trim(),
+      phoneNumber: _phoneController.text.trim().isEmpty 
+          ? null 
+          : _phoneController.text.trim(),
+    );
 
-    try {
-      // TODO: Implement actual registration logic
-      await Future.delayed(const Duration(seconds: 2)); // Simulate registration
-      
-      if (mounted) {
-        CustomDialog.showSuccess(
-          context: context,
-          title: 'Registration Successful',
-          message: 'Your account has been created successfully',
-          onConfirm: () => context.go(AppRoutes.login),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        CustomDialog.showError(
-          context: context,
-          title: 'Registration Failed',
-          message: e.toString(),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+    if (mounted) {
+      result.fold(
+        (failure) {
+          CustomDialog.showError(
+            context: context,
+            title: 'Registration Failed',
+            message: failure.message,
+          );
+        },
+        (user) {
+          CustomDialog.showSuccess(
+            context: context,
+            title: 'Registration Successful',
+            message: 'Welcome to Barbershop Booking! Your account has been created successfully.',
+            onConfirm: () {
+              // Navigate to home after successful registration
+              context.go(AppRoutes.home);
+            },
+          );
+        },
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authStateProvider);
+    final isLoading = authState.isLoading;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: CustomAppBar(
@@ -104,6 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   controller: _nameController,
                   validator: Validators.validateName,
                   prefixIcon: const Icon(Icons.person_outlined),
+                  enabled: !isLoading,
                 ),
                 
                 const SizedBox(height: 20),
@@ -116,6 +129,25 @@ class _RegisterPageState extends State<RegisterPage> {
                   keyboardType: TextInputType.emailAddress,
                   validator: Validators.validateEmail,
                   prefixIcon: const Icon(Icons.email_outlined),
+                  enabled: !isLoading,
+                ),
+                
+                const SizedBox(height: 20),
+                
+                // Phone Field (Optional)
+                CustomTextField(
+                  label: 'Phone Number (Optional)',
+                  hint: 'Enter your phone number',
+                  controller: _phoneController,
+                  keyboardType: TextInputType.phone,
+                  validator: (value) {
+                    if (value != null && value.isNotEmpty) {
+                      return Validators.validatePhone(value);
+                    }
+                    return null;
+                  },
+                  prefixIcon: const Icon(Icons.phone_outlined),
+                  enabled: !isLoading,
                 ),
                 
                 const SizedBox(height: 20),
@@ -128,6 +160,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   obscureText: true,
                   validator: Validators.validatePassword,
                   prefixIcon: const Icon(Icons.lock_outlined),
+                  enabled: !isLoading,
                 ),
                 
                 const SizedBox(height: 20),
@@ -143,6 +176,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     _passwordController.text,
                   ),
                   prefixIcon: const Icon(Icons.lock_outlined),
+                  enabled: !isLoading,
                 ),
                 
                 const SizedBox(height: 32),
@@ -150,8 +184,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 // Register Button
                 CustomButton(
                   text: 'Create Account',
-                  onPressed: _handleRegister,
-                  isLoading: _isLoading,
+                  onPressed: isLoading ? null : _handleRegister,
+                  isLoading: isLoading,
                 ),
                 
                 const SizedBox(height: 32),
@@ -166,7 +200,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         style: AppTextStyles.bodyMedium,
                       ),
                       TextButton(
-                        onPressed: () => context.pop(),
+                        onPressed: isLoading ? null : () => context.pop(),
                         child: Text(
                           'Sign In',
                           style: AppTextStyles.bodyMedium.copyWith(

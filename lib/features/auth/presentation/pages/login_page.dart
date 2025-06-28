@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/constants/app_routes.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../shared/widgets/widgets.dart';
+import '../providers/auth_state_provider.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -29,33 +30,74 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _isLoading = true);
+    final authNotifier = ref.read(authStateProvider.notifier);
+    
+    final result = await authNotifier.signInWithEmailAndPassword(
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
 
-    try {
-      // TODO: Implement actual login logic
-      await Future.delayed(const Duration(seconds: 2)); // Simulate login
-      
-      if (mounted) {
-        // TODO: Navigate based on user role
+    if (mounted) {
+      result.fold(
+        (failure) {
+          CustomDialog.showError(
+            context: context,
+            title: 'Login Failed',
+            message: failure.message,
+          );
+        },
+        (user) {
+          // Navigate based on user role
+          _navigateBasedOnRole(user.role);
+        },
+      );
+    }
+  }
+
+  Future<void> _handleGoogleSignIn() async {
+    final authNotifier = ref.read(authStateProvider.notifier);
+    
+    final result = await authNotifier.signInWithGoogle();
+
+    if (mounted) {
+      result.fold(
+        (failure) {
+          CustomDialog.showError(
+            context: context,
+            title: 'Google Sign In Failed',
+            message: failure.message,
+          );
+        },
+        (user) {
+          // Navigate based on user role
+          _navigateBasedOnRole(user.role);
+        },
+      );
+    }
+  }
+
+  void _navigateBasedOnRole(String role) {
+    switch (role) {
+      case 'customer':
         context.go(AppRoutes.home);
-      }
-    } catch (e) {
-      if (mounted) {
-        CustomDialog.showError(
-          context: context,
-          title: 'Login Failed',
-          message: e.toString(),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+        break;
+      case 'barber':
+        context.go(AppRoutes.barberDashboard);
+        break;
+      case 'admin':
+      case 'super_admin':
+        context.go(AppRoutes.adminDashboard);
+        break;
+      default:
+        context.go(AppRoutes.home);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authStateProvider);
+    final isLoading = authState.isLoading;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -110,6 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                   keyboardType: TextInputType.emailAddress,
                   validator: Validators.validateEmail,
                   prefixIcon: const Icon(Icons.email_outlined),
+                  enabled: !isLoading,
                 ),
                 
                 const SizedBox(height: 20),
@@ -122,6 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: true,
                   validator: Validators.validatePassword,
                   prefixIcon: const Icon(Icons.lock_outlined),
+                  enabled: !isLoading,
                 ),
                 
                 const SizedBox(height: 16),
@@ -130,8 +174,8 @@ class _LoginPageState extends State<LoginPage> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () {
-                      // TODO: Navigate to forgot password
+                    onPressed: isLoading ? null : () {
+                      _showForgotPasswordDialog();
                     },
                     child: Text(
                       'Forgot Password?',
@@ -147,8 +191,8 @@ class _LoginPageState extends State<LoginPage> {
                 // Login Button
                 CustomButton(
                   text: 'Sign In',
-                  onPressed: _handleLogin,
-                  isLoading: _isLoading,
+                  onPressed: isLoading ? null : _handleLogin,
+                  isLoading: isLoading,
                 ),
                 
                 const SizedBox(height: 24),
@@ -175,9 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                 // Google Sign In
                 CustomButton(
                   text: 'Continue with Google',
-                  onPressed: () {
-                    // TODO: Implement Google Sign In
-                  },
+                  onPressed: isLoading ? null : _handleGoogleSignIn,
                   type: ButtonType.outline,
                   icon: const Icon(Icons.g_mobiledata, size: 24),
                 ),
@@ -194,7 +236,7 @@ class _LoginPageState extends State<LoginPage> {
                         style: AppTextStyles.bodyMedium,
                       ),
                       TextButton(
-                        onPressed: () => context.push(AppRoutes.register),
+                        onPressed: isLoading ? null : () => context.push(AppRoutes.register),
                         child: Text(
                           'Sign Up',
                           style: AppTextStyles.bodyMedium.copyWith(
@@ -210,6 +252,74 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+  void _showForgotPasswordDialog() {
+    final emailController = TextEditingController();
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Reset Password'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Enter your email address to receive a password reset link.'),
+            const SizedBox(height: 16),
+            CustomTextField(
+              controller: emailController,
+              hint: 'Enter your email',
+              keyboardType: TextInputType.emailAddress,
+              validator: Validators.validateEmail,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (emailController.text.trim().isEmpty) {
+                CustomDialog.showError(
+                  context: context,
+                  title: 'Error',
+                  message: 'Please enter your email address',
+                );
+                return;
+              }
+              
+              Navigator.pop(context);
+              
+              final authNotifier = ref.read(authStateProvider.notifier);
+              final result = await authNotifier.sendPasswordResetEmail(
+                emailController.text.trim(),
+              );
+              
+              if (mounted) {
+                result.fold(
+                  (failure) {
+                    CustomDialog.showError(
+                      context: context,
+                      title: 'Error',
+                      message: failure.message,
+                    );
+                  },
+                  (_) {
+                    CustomDialog.showSuccess(
+                      context: context,
+                      title: 'Success',
+                      message: 'Password reset email sent! Check your inbox.',
+                    );
+                  },
+                );
+              }
+            },
+            child: const Text('Send'),
+          ),
+        ],
       ),
     );
   }
