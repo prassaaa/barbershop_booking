@@ -88,10 +88,10 @@ class _DateSelectionPageState extends ConsumerState<DateSelectionPage> {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.1),
+        color: AppColors.primary.withValues(alpha: 0.1),
         border: Border(
           bottom: BorderSide(
-            color: AppColors.primary.withOpacity(0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
             width: 1,
           ),
         ),
@@ -191,7 +191,7 @@ class _DateSelectionPageState extends ConsumerState<DateSelectionPage> {
               shape: BoxShape.circle,
             ),
             todayDecoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.5),
+              color: AppColors.primary.withValues(alpha: 0.5),
               shape: BoxShape.circle,
             ),
             disabledDecoration: BoxDecoration(
@@ -239,11 +239,11 @@ class _DateSelectionPageState extends ConsumerState<DateSelectionPage> {
     
     return Card(
       elevation: 2,
-      color: AppColors.success.withOpacity(0.1),
+      color: AppColors.success.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: AppColors.success.withOpacity(0.3),
+          color: AppColors.success.withValues(alpha: 0.3),
           width: 1,
         ),
       ),

@@ -391,11 +391,11 @@ class _BookingConfirmationPageState extends ConsumerState<BookingConfirmationPag
   Widget _buildTermsAndConditions() {
     return Card(
       elevation: 1,
-      color: AppColors.warning.withOpacity(0.1),
+      color: AppColors.warning.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: AppColors.warning.withOpacity(0.3),
+          color: AppColors.warning.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -468,7 +468,7 @@ class _BookingConfirmationPageState extends ConsumerState<BookingConfirmationPag
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),

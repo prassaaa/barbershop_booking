@@ -68,7 +68,7 @@ class BookingSuccessPage extends ConsumerWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: AppColors.success.withOpacity(0.3),
+            color: AppColors.success.withValues(alpha: 0.3),
             blurRadius: 20,
             spreadRadius: 5,
           ),
@@ -262,10 +262,10 @@ class BookingSuccessPage extends ConsumerWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.warning.withOpacity(0.1),
+                  color: AppColors.warning.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: AppColors.warning.withOpacity(0.3),
+                    color: AppColors.warning.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Text(
@@ -286,11 +286,11 @@ class BookingSuccessPage extends ConsumerWidget {
   Widget _buildNextStepsCard() {
     return Card(
       elevation: 2,
-      color: AppColors.info.withOpacity(0.1),
+      color: AppColors.info.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: AppColors.info.withOpacity(0.3),
+          color: AppColors.info.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -371,7 +371,7 @@ class BookingSuccessPage extends ConsumerWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),

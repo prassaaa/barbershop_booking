@@ -180,47 +180,6 @@ flutter run -d <device-id>
 
 For detailed development instructions, see **[Development Guide](docs/DEVELOPMENT.md)**
 
-## 🎯 **Booking Flow Implementation** ✅
-
-**Status: COMPLETED** - Full end-to-end booking experience implemented!
-
-### 📱 **Implemented Pages & Features**
-
-| Step | Page | Status | Features |
-|------|------|--------|----------|
-| 1 | **Service Selection** | ✅ | Service grid, pricing, duration display |
-| 2 | **Barber Selection** | ✅ | Filtered barbers, ratings, experience, availability |
-| 3 | **Date Selection** | ✅ | Interactive calendar, date validation, disabled past dates |
-| 4 | **Time Selection** | ✅ | Dynamic slots, morning/afternoon/evening grouping |
-| 5 | **Confirmation** | ✅ | Complete summary, notes, price breakdown, T&C |
-| 6 | **Success** | ✅ | Confirmation details, next steps, navigation options |
-
-### 🏗️ **Technical Implementation**
-
-- **State Management**: Complete Riverpod provider architecture
-- **Navigation**: GoRouter with 7 new booking routes
-- **Widgets**: 6 new custom components for booking flow
-- **Validation**: Step-by-step validation and error handling
-- **UI/UX**: Modern design with progress indicators and animations
-- **Models**: Enhanced BarberModel with additional properties
-
-### 🔄 **Flow Navigation**
-```
-Service → Barber → Date → Time → Confirmation → Success
-   ↓        ↓       ↓      ↓         ↓          ↓
- Always  Service  Barber  Date    Time      Complete
-Available Required Required Required Required  Booking
-```
-
-### 🎨 **UI Components Created**
-- `BookingFlowPage` - Main flow with progress indicator
-- `BarberSelectionCard` - Professional barber display
-- `TimeSlotCard` - Interactive time selection
-- `CachedNetworkImageWidget` - Optimized image loading
-- `LoadingWidget` & `CustomErrorWidget` - Better UX
-
----
-
 ## 🗄️ Database Structure
 
 ### Firestore Collections
@@ -313,7 +272,7 @@ reviews/{reviewId} {
 - [x] Basic UI components
 - [x] Customer home page
 
-### Phase 2: Core Features ✅
+### Phase 2: Core Features (In Progress)
 - [x] Real Firebase authentication integration
 - [x] Customer dashboard with modern UI
 - [x] **Complete customer booking flow**
@@ -399,7 +358,7 @@ For support and questions:
 
 **Prasetyo Ari Wibowo**
 - GitHub: [@prassaaa](https://github.com/prassaaa)
-- LinkedIn: [Connect with me](https://linkedin.com/in/prasetyo-ari-wibowo)
+- Instagram: [Connect with me](https://www.instagram.com/prastyarw/)
 
 ---
 

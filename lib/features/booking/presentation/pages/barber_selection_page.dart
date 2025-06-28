@@ -43,10 +43,10 @@ class BarberSelectionPage extends ConsumerWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
+              color: AppColors.primary.withValues(alpha: 0.1),
               border: Border(
                 bottom: BorderSide(
-                  color: AppColors.primary.withOpacity(0.3),
+                  color: AppColors.primary.withValues(alpha: 0.3),
                   width: 1,
                 ),
               ),

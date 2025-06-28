@@ -21,7 +21,7 @@ class BarberSelectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: isSelected ? 8 : 2,
-      color: isSelected ? AppColors.primary.withOpacity(0.1) : Colors.white,
+      color: isSelected ? AppColors.primary.withValues(alpha: 0.1) : Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
@@ -135,7 +135,7 @@ class BarberSelectionCard extends StatelessWidget {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.success.withOpacity(0.1),
+                            color: AppColors.success.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
