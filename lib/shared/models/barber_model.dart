@@ -9,10 +9,13 @@ class BarberModel extends Equatable {
   final String userId;
   final String name;
   final String? photoUrl;
+  final String? profileImage; // For backward compatibility
   final String? bio;
   final double rating;
   final int totalReviews;
+  final int experienceYears;
   final bool isActive;
+  final bool isAvailable;
   final Map<String, BarberShift> weeklyShifts;
   final List<String> specialties;
   final DateTime createdAt;
@@ -23,10 +26,13 @@ class BarberModel extends Equatable {
     required this.userId,
     required this.name,
     this.photoUrl,
+    this.profileImage,
     this.bio,
     required this.rating,
     required this.totalReviews,
+    this.experienceYears = 0,
     required this.isActive,
+    this.isAvailable = true,
     required this.weeklyShifts,
     required this.specialties,
     required this.createdAt,
@@ -43,10 +49,13 @@ class BarberModel extends Equatable {
     String? userId,
     String? name,
     String? photoUrl,
+    String? profileImage,
     String? bio,
     double? rating,
     int? totalReviews,
+    int? experienceYears,
     bool? isActive,
+    bool? isAvailable,
     Map<String, BarberShift>? weeklyShifts,
     List<String>? specialties,
     DateTime? createdAt,
@@ -57,10 +66,13 @@ class BarberModel extends Equatable {
       userId: userId ?? this.userId,
       name: name ?? this.name,
       photoUrl: photoUrl ?? this.photoUrl,
+      profileImage: profileImage ?? this.profileImage,
       bio: bio ?? this.bio,
       rating: rating ?? this.rating,
       totalReviews: totalReviews ?? this.totalReviews,
+      experienceYears: experienceYears ?? this.experienceYears,
       isActive: isActive ?? this.isActive,
+      isAvailable: isAvailable ?? this.isAvailable,
       weeklyShifts: weeklyShifts ?? this.weeklyShifts,
       specialties: specialties ?? this.specialties,
       createdAt: createdAt ?? this.createdAt,
@@ -82,10 +94,13 @@ class BarberModel extends Equatable {
         userId,
         name,
         photoUrl,
+        profileImage,
         bio,
         rating,
         totalReviews,
+        experienceYears,
         isActive,
+        isAvailable,
         weeklyShifts,
         specialties,
         createdAt,

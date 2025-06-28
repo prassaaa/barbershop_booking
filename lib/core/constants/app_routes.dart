@@ -8,6 +8,13 @@ class AppRoutes {
   // Customer Routes
   static const String home = '/home';
   static const String booking = '/booking';
+  static const String bookingFlow = '/booking/flow';
+  static const String serviceSelection = '/booking/service-selection';
+  static const String barberSelection = '/booking/barber-selection';
+  static const String dateSelection = '/booking/date-selection';
+  static const String timeSelection = '/booking/time-selection';
+  static const String bookingConfirmation = '/booking/confirmation';
+  static const String bookingSuccess = '/booking/success';
   static const String bookingDetails = '/booking/:id';
   static const String services = '/services';
   static const String barbers = '/barbers';

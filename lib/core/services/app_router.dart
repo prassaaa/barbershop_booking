@@ -5,6 +5,14 @@ import '../../features/auth/presentation/pages/splash_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/customer/presentation/pages/customer_home_page.dart';
+import '../../features/booking/presentation/pages/booking_flow_page.dart';
+import '../../features/booking/presentation/pages/service_selection_page.dart';
+import '../../features/booking/presentation/pages/barber_selection_page.dart';
+import '../../features/booking/presentation/pages/date_selection_page.dart';
+import '../../features/booking/presentation/pages/time_selection_page.dart';
+import '../../features/booking/presentation/pages/booking_confirmation_page.dart';
+import '../../features/booking/presentation/pages/booking_success_page.dart';
+import '../../shared/models/booking_model.dart';
 import '../services/firebase_service.dart';
 
 class AppRouter {
@@ -34,6 +42,55 @@ class AppRouter {
         path: AppRoutes.home,
         name: 'home',
         builder: (context, state) => const CustomerHomePage(),
+      ),
+      
+      // Booking Routes
+      GoRoute(
+        path: AppRoutes.bookingFlow,
+        name: 'booking-flow',
+        builder: (context, state) => const BookingFlowPage(),
+      ),
+      
+      GoRoute(
+        path: AppRoutes.serviceSelection,
+        name: 'service-selection',
+        builder: (context, state) => const ServiceSelectionPage(),
+      ),
+      
+      GoRoute(
+        path: AppRoutes.barberSelection,
+        name: 'barber-selection',
+        builder: (context, state) => const BarberSelectionPage(),
+      ),
+      
+      GoRoute(
+        path: AppRoutes.dateSelection,
+        name: 'date-selection',
+        builder: (context, state) => const DateSelectionPage(),
+      ),
+      
+      GoRoute(
+        path: AppRoutes.timeSelection,
+        name: 'time-selection',
+        builder: (context, state) => const TimeSelectionPage(),
+      ),
+      
+      GoRoute(
+        path: AppRoutes.bookingConfirmation,
+        name: 'booking-confirmation',
+        builder: (context, state) => const BookingConfirmationPage(),
+      ),
+      
+      GoRoute(
+        path: AppRoutes.bookingSuccess,
+        name: 'booking-success',
+        builder: (context, state) {
+          final booking = state.extra as BookingModel?;
+          if (booking == null) {
+            return const ErrorPage();
+          }
+          return BookingSuccessPage(booking: booking);
+        },
       ),
       
       // Placeholder pages (will be created later)
@@ -75,6 +132,13 @@ class AppRouter {
     final authRequiredRoutes = [
       AppRoutes.home,
       AppRoutes.booking,
+      AppRoutes.bookingFlow,
+      AppRoutes.serviceSelection,
+      AppRoutes.barberSelection,
+      AppRoutes.dateSelection,
+      AppRoutes.timeSelection,
+      AppRoutes.bookingConfirmation,
+      AppRoutes.bookingSuccess,
       AppRoutes.profile,
       AppRoutes.barberDashboard,
       AppRoutes.adminDashboard,
