@@ -12,6 +12,8 @@ import '../../features/booking/presentation/pages/date_selection_page.dart';
 import '../../features/booking/presentation/pages/time_selection_page.dart';
 import '../../features/booking/presentation/pages/booking_confirmation_page.dart';
 import '../../features/booking/presentation/pages/booking_success_page.dart';
+import '../../features/barber/presentation/pages/barber_dashboard_page.dart';
+import '../../features/barber/presentation/pages/barber_schedule_page.dart';
 import '../../shared/models/booking_model.dart';
 import '../services/firebase_service.dart';
 
@@ -110,7 +112,13 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.barberDashboard,
         name: 'barber-dashboard',
-        builder: (context, state) => const PlaceholderPage(title: 'Barber Dashboard'),
+        builder: (context, state) => const BarberDashboardPage(),
+      ),
+      
+      GoRoute(
+        path: AppRoutes.barberSchedule,
+        name: 'barber-schedule',
+        builder: (context, state) => const BarberSchedulePage(),
       ),
       
       // Admin Routes
